@@ -1,0 +1,171 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+
+# shiny libraries()
+
+```{shinylive-r}
+library(shiny)
+library(shinyAce)
+
+
+```
+
+# r libraries 
+```{r}
+library(readxl)
+library(stringr)
+
+```
+
+
+# On test
+```{r}
+
+
+#Ruta del archivo Excel
+
+# File explorer to open
+xlsx_path <- file.choose()
+  #Input (user can select the extension file) 
+
+
+# Logic:
+# Inicializamos una lista para almacenar todos los correos encontrados
+all_correos <- c()
+
+# Cargamos el archivo Excel
+data <- readxl::read_excel(xlsx_path, sheet = NULL, col_names = TRUE)
+
+
+# Patrón para buscar direcciones de correo electrónico
+email_pattern <- '\\S+@\\S+'
+
+# Look emails on column
+
+
+nombresColumnas <- colnames(data) 
+# Input (user can select the column)
+
+all_correos <- data$Correo
+
+all_correos <- correos_raw <- na.omit(as.character(all_correos))
+
+
+# Eliminamos posibles duplicados y ordenamos los correos
+all_correos_unique <- unique(all_correos)
+all_correos_unique <- sort(all_correos_unique)
+
+# Input(user select the format of the output file)
+# xlsx, csv, txt, xls
+# Output
+# Guardamos los correos en un archivo de texto
+
+
+```
+
+
+
+```{r}
+
+
+# Ruta del archivo Excel
+
+# File explorer to open
+xlsx_path <- file.choose()
+  #Input (user can select the extension file) 
+
+
+# Logic:
+# Inicializamos una lista para almacenar todos los correos encontrados
+all_correos <- c()
+
+# Cargamos el archivo Excel
+xlsx <- readxl::read_excel(xlsx_path, sheet = NULL, col_names = TRUE)
+
+
+# Patrón para buscar direcciones de correo electrónico
+email_pattern <- '\\S+@\\S+'
+
+data_sheet <- readxl::read_excel(xlsx, sheet = NULL, col_names = TRUE)
+
+# Iteramos sobre cada hoja del Excel
+for (sheet in sheet_names) {
+  # Cargamos los datos de la hoja actual
+  data_sheet <- readxl::read_excel(xlsx, sheet = sheet, col_names = TRUE)
+
+  # Iteramos sobre todas las columnas de la hoja
+  for (col_name in names(data_sheet)) {
+    # Verificamos si el nombre de la columna contiene "correo" o "correo electrónico"
+    if (grepl('correo', tolower(col_name)) || grepl('correo electrónico', tolower(col_name))) {
+      # Extraemos los correos de la columna encontrada
+      correos_raw <- na.omit(as.character(data_sheet[[col_name]]))
+      
+      # Buscamos los correos en cada entrada y los añadimos a la lista de correos
+      for (entry in correos_raw) {
+        correos <- str_extract_all(entry, email_pattern)[[1]]
+        all_correos <- c(all_correos, correos)
+      }
+    }
+  }
+}
+
+# Eliminamos posibles duplicados y ordenamos los correos
+all_correos_unique <- unique(all_correos)
+all_correos_unique <- sort(all_correos_unique)
+
+# Output
+
+# Guardamos los correos en un archivo de texto
+
+output_file_path <- '' #Input (the user put his download path)
+writeLines(all_correos_unique, con = output_file_path)
+
+# Devolvemos la ruta del archivo creado y el número de correos únicos extraídos
+list(output_file_path, length(all_correos_unique))
+
+
+
+
+```
+
+
+
+
+```{r}
+# Ruta del archivo Excel
+xlsx_path <-  #Input 
+  """
+  (user can select the extension file)
+  What extensions files?
+  - csv, xlsx, xls, txt(related with data frame structures)
+"""
+  
+```
+
+
+```{r}
+lifeformat <- #Panel of inputs para 
+  """
+  user select the format 
+"""
+  
+
+
+
+
+```
+
+
+
+```{shinylive}
+ui <- fluidPage(
+  sidebarPanel(
+    sliderInput()
+  )
+)
+```
+
