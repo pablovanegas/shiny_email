@@ -1,31 +1,16 @@
-# Load the ggplot2 package which provides
-# the 'mpg' dataset.
-library(ggplot2)
+library(shiny)
+library(readxl)
+library(stringr)
 
-fluidPage(
-  titlePanel("Basic DataTable"),
-  
-  # Create a new Row in the UI for selectInputs
-  fluidRow(
-    column(4,
-           selectInput("man",
-                       "Manufacturer:",
-                       c("All",
-                         unique(as.character(mpg$manufacturer))))
+ui <- fluidPage(
+  titlePanel("File Upload"),
+  sidebarLayout(
+    sidebarPanel(
+      fileInput("file", "Choose a File", accept = c("text/csv", "text/xlsx", "text/sql", "text/xml", ".csv", ".xlsx", ".sql", ".xml", ".txt"))
     ),
-    column(4,
-           selectInput("trans",
-                       "Transmission:",
-                       c("All",
-                         unique(as.character(mpg$trans))))
-    ),
-    column(4,
-           selectInput("cyl",
-                       "Cylinders:",
-                       c("All",
-                         unique(as.character(mpg$cyl))))
+    mainPanel(
+      tableOutput("contents"),
+      textOutput("columnNames")
     )
-  ),
-  # Create a new row for the table.
-  DT::dataTableOutput("table")
+  )
 )

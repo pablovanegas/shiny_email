@@ -1,23 +1,35 @@
-# Load the ggplot2 package which provides
-# the 'mpg' dataset.
-library(ggplot2)
+library(shiny)
+library(readxl)
+library(stringr)
 
-function(input, output) {
+server <- function(input, output) {
+  originalFileContent <- reactiveVal(NULL)
   
-  # Filter data based on selections
-  output$table <- DT::renderDataTable(DT::datatable({
-    data <- mpg
-    if (input$man != "All") {
-      data <- data[data$manufacturer == input$man,]
-    }
-    if (input$cyl != "All") {
-      data <- data[data$cyl == input$cyl,]
-    }
-    if (input$trans != "All") {
-      data <- data[data$trans == input$trans,]
-    }
-    data
-  }))
+  observeEvent(input$file, {
+    req(input$file)
+    fileContent <- read_file(input$file$datapath)
+    originalFileContent(fileContent)
+    
+    output$contents <- renderTable({
+      data.frame(Content = originalFileContent())
+    })
+    
+    save_file(fileContent, "/home/juan/shiny_email/input.txt")
+  })
   
+  # Exponer el contenido del archivo cargado
+  loadedFileContent <- reactive({
+    originalFileContent()
+  })
+  
+  # Asignar el contenido del archivo cargado a un valor global
+  globalFileContent <<- loadedFileContent
 }
 
+read_file <- function(file_path) {
+  # ... (código sin cambios)
+}
+
+save_file <- function(fileContent, file_path) {
+  # ... (código sin cambios)
+}
