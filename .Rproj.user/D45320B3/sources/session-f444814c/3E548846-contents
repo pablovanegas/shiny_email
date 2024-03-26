@@ -1,0 +1,41 @@
+server <- function(input, output) {
+  # Initialize a reactive value to store the emails
+  all_correos <- reactiveVal(NULL)
+  
+  # Observe file upload
+  observeEvent(input$file, {
+    req(input$file) # Ensure the file is uploaded
+    
+    # Load the data from the uploaded file
+    data_sheet <- read_excel(input$file$datapath)
+    
+    # Pattern to search for email addresses
+    email_pattern <- "\\S+@\\S+"
+    
+    # Initialize a vector to store all emails found
+    correos <- c()
+    
+    # Iterate over all columns of the sheet
+    for (col_name in names(data_sheet)) {
+      # Check if the column name contains "correo" or "correo electrónico"
+      if (grepl("correo", tolower(col_name)) | grepl("correo electrónico", tolower(col_name))) {
+        # Extract the emails from the found column
+        correos_raw <- na.omit(as.character(data_sheet[[col_name]]))
+        
+        # Search for emails in each entry and add them to the email list
+        for (entry in correos_raw) {
+          correos_found <- str_extract_all(entry, pattern = email_pattern)[[1]]
+          correos <- c(correos, correos_found)
+        }
+      }
+    }
+    
+    # Update the reactive value with the emails found
+    all_correos(correos)
+  })
+  
+  # Render the table with the emails
+  output$contents <- renderTable({
+    data.frame(Emails = all_correos())
+  })
+}
