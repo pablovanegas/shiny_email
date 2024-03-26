@@ -10,6 +10,7 @@ ui <- fluidPage(
     
     sidebarPanel(
       fileInput("file", "Choose a File", accept = c("text/csv", "text/xlsx", "text/sql", "text/xml", ".csv", ".xlsx", ".sql", ".xml", ".txt")),
+      uiOutput("checkbox_group"), # Add this line
       downloadButton("Download", "Download Document")
     ), # End of sidebarPanel
     # Show the content of the file
