@@ -1,3 +1,0 @@
-export async function installPackages(webR) {
-await webR.evalRVoid(`webr::install(c("R6", "Rcpp", "base64enc", "bslib", "cachem", "cli", "commonmark", "crayon", "digest", "ellipsis", "fastmap", "fontawesome", "fs", "glue", "htmltools", "httpuv", "jquerylib", "jsonlite", "later", "lifecycle", "magrittr", "memoise", "mime", "promises", "rappdirs", "renv", "rlang", "sass", "shiny", "sourcetools", "withr", "xtable"), repos="${window.location.href}/repo/")`);
-}
