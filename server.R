@@ -1,6 +1,11 @@
+# Asegúrate de tener el paquete 'openxlsx' instalado
+# Si no lo tienes, puedes descomentar la siguiente línea para instalarlo
+# install.packages("openxlsx")
+
 library(shiny)
 library(readxl)
 library(stringr)
+library(openxlsx)  # Añade esta línea
 
 server <- function(input, output) {
   
@@ -20,25 +25,49 @@ server <- function(input, output) {
                         "TXT" = 'txt')
     
     # Read the file based on its type
-    data_sheet <- switch(file_type,
-                         "csv" = read.csv(input$file$datapath, sep = input$csv_sep),  # Use the user-specified delimiter for CSV files
-                         "xlsx" = read_xlsx(input$file$datapath, sheet = input$excel_sheet),  # Use the user-specified sheet for Excel files
-                         "txt" = read.table(input$file$datapath, sep = input$txt_sep),  # Use the user-specified delimiter for TXT files
-                         "sql" = read_sql(input$file$datapath),  # No adjustments needed for SQL files
-                         "xml" = read_xml(input$file$datapath))  # No adjustments needed for XML files
-
+    data_sheet <- tryCatch(
+      switch(file_type,
+             "csv" = {
+               sep <- if (input$csv_sep != "Other") input$csv_sep else input$csv_other
+               read.csv(input$file$datapath, sep = sep)
+             },
+             "xlsx" = {
+               tryCatch(
+                 read_xlsx(input$file$datapath, sheet = input$excel_sheet),
+                 error = function(e) {
+                   showModal(modalDialog(
+                     title = "Error",
+                     "La hoja de Excel especificada no existe en el archivo subido. Por favor, selecciona una hoja válida.",
+                     easyClose = TRUE
+                   ))
+                   return(NULL)
+                 }
+               )
+             },
+             "txt" = read.table(input$file$datapath, sep = input$txt_sep),
+             "sql" = read_sql(input$file$datapath),
+             "xml" = read_xml(input$file$datapath)),
+      error = function(e) {
+        showModal(modalDialog(
+          title = "Error",
+          "El archivo no se pudo leer. Por favor, verifica que el archivo sea válido y que el tipo de archivo seleccionado sea correcto.",
+          easyClose = TRUE
+        ))
+        return(NULL)
+      }
+    )
+    
     # Verify the file extension
     file_ext <- tools::file_ext(input$file$name)
     
     # Check if the file extension is valid
     if (tolower(file_ext) != tolower(input$file_type)) {
-      # If not, show an error message and stop the execution
       showModal(modalDialog(
         title = "Error",
         "The file extension does not match the selected file type. Please select the correct file type or upload a file with the correct extension.",
         easyClose = TRUE
       ))
-      return()  # Use return() instead of stop()
+      return()
     }
     
     # Create checkbox group
@@ -57,17 +86,14 @@ server <- function(input, output) {
       
       # Iterate over selected columns of the sheet
       for (col_name in input$columns) {
-        # Extract the emails from the column
         correos_raw = na.omit(as.character(data_sheet[[col_name]]))
         
-        # Search for emails in each entry and add them to the email list
         for (entry in correos_raw) {
           correos_found <- str_extract_all(entry, email_pattern)[[1]]
           correos <- c(correos, correos_found)
         }
       }
       
-      # Update the reactive value with the emails found
       originalFileContent(correos)
       
       output$contents <- renderTable({
@@ -82,12 +108,23 @@ server <- function(input, output) {
       # Download handler
       output$Download <- downloadHandler(
         filename = function() {
+          paste(tools::file_path_sans_ext(input$file$name), "_emails", ".xlsx", sep = "")
+        },
+        content = function(file) {
+          emails_df <- data.frame(Emails = as.character(originalFileContent()))
+          write.xlsx(emails_df, file)
+        }
+      )
+      
+      output$Download2 <- downloadHandler(
+        filename = function() {
           paste(tools::file_path_sans_ext(input$file$name), "_emails", ".txt", sep = "")
         },
         content = function(file) {
-          writeLines(as.character(originalFileContent()), con = file)
+          write.table(originalFileContent(), file)
         }
       )
-    }) # End of observeEvent
-  }) # End of observeEvent
+      
+    }) # End of observeEvent of column selection
+  }) # End of observeEvent of file upload
 } # End of server function

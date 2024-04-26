@@ -1,6 +1,6 @@
 ui <- fluidPage(
   
-  titlePanel("Extractor!"),
+  titlePanel("Email Extractor: "),
   
   sidebarLayout(
     
@@ -11,7 +11,8 @@ ui <- fluidPage(
       
       conditionalPanel(
         condition = "input.file_type == 'CSV'",
-        textInput("csv_sep", "CSV Separator:", ",")
+        selectInput("csv_sep", "CSV Separator:", choices = c("Comma" = ",", "Semicolon" = ";", "Tab" = "\t", "Space" = " ", "Other" = "Other")),
+        textInput('csv_other', 'Other Separator:', ',')
       ),
     
       conditionalPanel(
@@ -26,8 +27,9 @@ ui <- fluidPage(
       ),
       
       
-      uiOutput("checkbox_group"), # Add this line
-      downloadButton("Download", "Download Document")
+      uiOutput("checkbox_group"), 
+      downloadButton("Download", "Download xlsx", icon = icon("download")),
+      downloadButton("Download2", "Download txt", icon = icon("download"))
     ), # End of sidebarPanel
     # Show the content of the file
     mainPanel(
