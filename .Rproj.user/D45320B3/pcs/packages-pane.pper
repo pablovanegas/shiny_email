@@ -1,7 +1,0 @@
-{
-    "installOptions": {
-        "installFromRepository": true,
-        "libraryPath": "/home/juan/Documents/shiny_email/renv/library/R-4.1/x86_64-pc-linux-gnu",
-        "installDependencies": true
-    }
-}
