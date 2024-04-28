@@ -8,8 +8,8 @@ ui <- fluidPage(
     
     sidebarPanel(
       helpText("Please select the file type first, then upload your file."),
-      selectInput("file_type", "Choose File Type:", choices = c("CSV", "XLSX","SQL","TXT")),
-      fileInput("file", "Choose a File", accept = c("text/csv", "text/xlsx", "text/sql", ".csv", ".xlsx", ".sql", ".txt")),
+      selectInput("file_type", "Choose File Type:", choices = c("CSV", "XLSX","TXT")),
+      fileInput("file", "Choose a File", accept = c("text/csv", "text/xlsx", "text/sql", ".csv", ".xlsx", ".txt")),
       
       conditionalPanel(
         condition = "input.file_type == 'CSV'",
@@ -17,17 +17,6 @@ ui <- fluidPage(
         textInput('csv_other', 'Other Separator:', ',')
       ),
     
-      conditionalPanel(
-        condition = "input.file_type == 'TXT'",
-        checkboxInput("txt_checkbox", "Separator", value = FALSE),
-        conditionalPanel(
-          condition = "input.txt_checkbox == true",
-          selectInput("txt_sep", "TXT Separator:", choices = c("Comma" = ",", "Semicolon" = ";", "Tab" = "\t", "Space" = " ", "Other" = "Other")),
-          textInput('txt_other', 'Other Separator:', ',')
-        )
-      )
-      ,
-      
       conditionalPanel(
         condition = "input.file_type == 'XLSX'",
         numericInput("excel_sheet", "Excel Sheet Number:", 1)
@@ -48,9 +37,8 @@ ui <- fluidPage(
     p("This app is designed to extract email addresses from different file types."),
     p("Please select the file type first, then upload your file."),
     p("If you choose CSV or TXT, you can select the separator."),
-    p("If you choose TXT, you can input the separator."),
     p("If you choose XLSX, you can input the sheet number."),
-    p("If you choose SQL, you can input the table name."),
+    p("#If you choose SQL, you can input the table name."),
     p("After you upload the file, you can download the extracted email addresses in xlsx and txt format.")
   ) # End of mainPanel
 )  # End of fluidPage
