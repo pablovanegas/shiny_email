@@ -1,0 +1,34 @@
+body {
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  color: #3498db;
+  font-size: 2em;
+}
+
+.sidebar {
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.main-panel {
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.download-button {
+  background-color: #2ecc71;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
