@@ -1,34 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap');
+
 body {
-  background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
+  background-color: black;
+  color: white; /* text color */
 }
 
 h2 {
-  color: #3498db;
-  font-size: 2em;
+  font-family: 'Yusei Magic', sans-serif;
 }
 
-.sidebar {
-  background-color: #ecf0f1;
-  border-radius: 5px;
-  padding: 20px;
+.DESCARGA1 {
+  background-color: rgb(255, 255, 255);
 }
 
-.main-panel {
-  background-color: #ffffff;
-  border-radius: 5px;
-  padding: 20px;
+.DESCARGA2 {
+  background-color: rgb(255, 255, 255);
 }
 
-.download-button {
-  background-color: #2ecc71;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
+.well {
+  background-color: rgb(0, 0, 0);
+  
+
 }
+
