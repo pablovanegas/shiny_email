@@ -1,6 +1,6 @@
 ui <- fluidPage(#shinythemes::themeSelector(),
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+    tags$link(rel = "stylesheet", type = "text/css",  href = "styles.css")
   ),
   
   titlePanel("Email Extractor: "),
@@ -10,7 +10,7 @@ ui <- fluidPage(#shinythemes::themeSelector(),
     sidebarPanel(
       helpText("Please select the file type first, then upload your file."),
       selectInput("file_type", "Choose File Type:", choices = c("CSV", "XLSX","TXT")),
-      fileInput("file", "Choose a File", accept = c("text/csv", "text/xlsx", "text/sql", ".csv", ".xlsx", ".txt")),
+      fileInput("file", "Choose a File", accept = c("text/csv", "text/xlsx", 'text/txt' ,  ".csv", ".xlsx", ".txt")),
       
       conditionalPanel(
         condition = "input.file_type == 'CSV'",
@@ -39,7 +39,6 @@ ui <- fluidPage(#shinythemes::themeSelector(),
     p("Please select the file type first, then upload your file."),
     p("If you choose CSV or TXT, you can select the separator."),
     p("If you choose XLSX, you can input the sheet number."),
-    p("#If you choose SQL, you can input the table name."),
     p("After you upload the file, you can download the extracted email addresses in xlsx and txt format.")
   ) # End of mainPanel
 )  # End of fluidPage
